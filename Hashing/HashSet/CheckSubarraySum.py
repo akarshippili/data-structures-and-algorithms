@@ -4,8 +4,7 @@ class Solution:
         hashset = set()
         prefix = nums[0] % k
         hashset.add(prefix)
-        hashset.add(0)
-        
+        hashset.add(0) 
         
         count = 0
         for i in nums:
