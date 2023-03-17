@@ -3,16 +3,16 @@ import math
 
 class SegmentTree:
 
-    def __init__(self, arr, operator = None, operationIdentity = None) -> None:
+    def __init__(self, arr, operator, operationIdentity) -> None:
         self.arrLength = len(arr)
         self.arr = arr
         self.modifiedNumberOfChildren = 2**(math.ceil(math.log(self.arrLength, 2)))
         self.segmentTreeLength = 2*self.modifiedNumberOfChildren - 1
         self.segmentTree = [None for i in range(self.segmentTreeLength)]
-        self.operationIdentity = 1 if not operationIdentity else operationIdentity
-        self.operation = lambda x, y : x*y if not operator else operator
+        self.operationIdentity = operationIdentity
+        self.operation = operator
         self.buildSegmentTree(0,self.modifiedNumberOfChildren-1, 0)
-
+    
     
     def buildSegmentTree(self, start, end, index):
         if(start == end): 
@@ -57,8 +57,9 @@ class SegmentTree:
         updateHelper(0, self.modifiedNumberOfChildren -1, 0, index, newValue)
 
 
-multiply = lambda x,y: x*y
-SegmentTree = SegmentTree([1,2,3,4,5,6])
+SegmentTree = SegmentTree([1,2,3,4,5,6], operator=lambda x, y : x*y, operationIdentity=1)
+
+
 print(SegmentTree.segmentTree)
 print(SegmentTree.query(0,5))
 print(SegmentTree.query(0,4))
@@ -89,6 +90,3 @@ print(SegmentTree.query(0,5))
 print(SegmentTree.query(0,4))
 print(SegmentTree.query(1,4))
 print(SegmentTree.query(2,5))
-
-
-
