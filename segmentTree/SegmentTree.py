@@ -56,10 +56,34 @@ class SegmentTree:
         self.arr[index] = newValue
         updateHelper(0, self.modifiedNumberOfChildren -1, 0, index, newValue)
 
+    def fillhelper(self, num, rstart, rend, fillNum, segstart, segend, index):
+        if(num == 0 or fillNum == 0): return
+        if(segend<rstart or rend<segstart): return
+        
+        # leaf node 
+        if(segstart == segend  and num == 1): 
+            self.segmentTree[index] = fillNum
+            return
+
+        mid = segstart + (segend - segstart)//2
+        rightSum = self.query(max(mid+1, rstart), rend)
+        numEmptyToRight = (rend - max(mid+1, rstart)) + 1 - rightSum
+        if(numEmptyToRight<0): numEmptyToRight = 0
+        
+        # enough to fill only right segment
+        if(numEmptyToRight >= num): self.fillhelper(num, mid+1, rend, fillNum, mid+1, segend, 2*index+2)
+        else:
+            # have to fill in both segments
+            self.fillhelper(numEmptyToRight, mid+1, rend, fillNum, mid+1, segend, 2*index+2)
+            self.fillhelper(num - numEmptyToRight, rstart, min(mid, rend), fillNum, segstart, mid, 2*index+1)
+
+        self.segmentTree[index] = self.operation(self.segmentTree[2*index+1], self.segmentTree[2*index+2])
+    
+    def rightfill(self, num, start, end, fillNum = None):    
+        if(not fillNum): fillNum = self.operationIdentity 
+        self.fillhelper(num, start, end, fillNum, 0, self.modifiedNumberOfChildren-1, 0)
 
 SegmentTree = SegmentTree([1,2,3,4,5,6], operator=lambda x, y : x*y, operationIdentity=1)
-
-
 print(SegmentTree.segmentTree)
 print(SegmentTree.query(0,5))
 print(SegmentTree.query(0,4))
@@ -90,3 +114,15 @@ print(SegmentTree.query(0,5))
 print(SegmentTree.query(0,4))
 print(SegmentTree.query(1,4))
 print(SegmentTree.query(2,5))
+
+
+SegmentTree = SegmentTree([0 for i in range(6)], operator=lambda x, y : x+y, operationIdentity=0)
+
+SegmentTree.rightfill(2, 0, 4, fillNum=1)
+print(SegmentTree.segmentTree)
+
+SegmentTree.rightfill(2, 0, 5, fillNum=1)
+print(SegmentTree.segmentTree)
+
+SegmentTree.rightfill(1, 0, 5, fillNum=1)
+print(SegmentTree.segmentTree)
