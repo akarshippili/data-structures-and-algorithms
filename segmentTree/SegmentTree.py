@@ -83,46 +83,46 @@ class SegmentTree:
         if(not fillNum): fillNum = self.operationIdentity 
         self.fillhelper(num, start, end, fillNum, 0, self.modifiedNumberOfChildren-1, 0)
 
-SegmentTree = SegmentTree([1,2,3,4,5,6], operator=lambda x, y : x*y, operationIdentity=1)
-print(SegmentTree.segmentTree)
-print(SegmentTree.query(0,5))
-print(SegmentTree.query(0,4))
-print(SegmentTree.query(1,4))
-print(SegmentTree.query(2,5))
+tree = SegmentTree([1,2,3,4,5,6], operator=lambda x, y : x*y, operationIdentity=1)
+print(tree.segmentTree)
+print(tree.query(0,5))
+print(tree.query(0,4))
+print(tree.query(1,4))
+print(tree.query(2,5))
 
-SegmentTree.update(0, 6)
-print(SegmentTree.segmentTree)
-print(SegmentTree.query(0,5))
-print(SegmentTree.query(0,4))
-print(SegmentTree.query(1,4))
-print(SegmentTree.query(2,5))
-
-
-
-SegmentTree.update(0,1)
-print(SegmentTree.segmentTree)
-print(SegmentTree.query(0,5))
-print(SegmentTree.query(0,4))
-print(SegmentTree.query(1,4))
-print(SegmentTree.query(2,5))
+tree.update(0, 6)
+print(tree.segmentTree)
+print(tree.query(0,5))
+print(tree.query(0,4))
+print(tree.query(1,4))
+print(tree.query(2,5))
 
 
 
-SegmentTree.update(5, 0)
-print(SegmentTree.segmentTree)
-print(SegmentTree.query(0,5))
-print(SegmentTree.query(0,4))
-print(SegmentTree.query(1,4))
-print(SegmentTree.query(2,5))
+tree.update(0,1)
+print(tree.segmentTree)
+print(tree.query(0,5))
+print(tree.query(0,4))
+print(tree.query(1,4))
+print(tree.query(2,5))
 
 
-SegmentTree = SegmentTree([0 for i in range(6)], operator=lambda x, y : x+y, operationIdentity=0)
 
-SegmentTree.rightfill(2, 0, 4, fillNum=1)
-print(SegmentTree.segmentTree)
+tree.update(5, 0)
+print(tree.segmentTree)
+print(tree.query(0,5))
+print(tree.query(0,4))
+print(tree.query(1,4))
+print(tree.query(2,5))
 
-SegmentTree.rightfill(2, 0, 5, fillNum=1)
-print(SegmentTree.segmentTree)
 
-SegmentTree.rightfill(1, 0, 5, fillNum=1)
-print(SegmentTree.segmentTree)
+tree = SegmentTree([0 for i in range(6)], operator=lambda x, y : x+y, operationIdentity=0)
+
+tree.rightfill(2, 0, 4, fillNum=1)
+print(tree.segmentTree)
+
+tree.rightfill(2, 0, 5, fillNum=1)
+print(tree.segmentTree)
+
+tree.rightfill(1, 0, 5, fillNum=1)
+print(tree.segmentTree)
