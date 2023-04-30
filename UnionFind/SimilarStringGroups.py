@@ -38,6 +38,14 @@ class UnionFind:
             self.componentSize[root2] += self.componentSize[root1]
         
         self.numberOfComponents -= 1
+    
+    def clone(self):
+        new = UnionFind(self.size)
+        new.componentSize = [i for i in self.componentSize]
+        new.id = [i for i in self.id]
+        new.numberOfComponents = self.numberOfComponents
+
+        return new
 
 
 class Solution:
