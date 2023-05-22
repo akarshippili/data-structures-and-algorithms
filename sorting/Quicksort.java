@@ -7,15 +7,6 @@ public class QuickSort implements SortingAlgorithm{
         return arr;
     }
 
-    public void public class QuickSort implements SortingAlgorithm{
-
-    @Override
-    public int[] sort(int[] arr) {
-        System.out.println("using quick sort");
-        quicksort(arr,0, arr.length-1);
-        return arr;
-    }
-
     public void quicksort(int[] arr, int start, int end){
 
         if(start >= end) return;
