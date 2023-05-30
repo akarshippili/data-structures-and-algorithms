@@ -78,19 +78,46 @@ class DoubllyLinkedList:
     def __str__(self) -> str:
         return str(self.head)
 
-dll = DoubllyLinkedList()
-node1 = DoubllyLinkedListNode(1)
-dll.addNodeToTail(node1)
-dll.delete(node1)
-dll.addNodeToTail(DoubllyLinkedListNode(2))
-dll.addNodeToTail(DoubllyLinkedListNode(3))
-node4 = DoubllyLinkedListNode(4)
-dll.addNodeToTail(node4)
-dll.addNodeToTail(DoubllyLinkedListNode(5))
+class MyHashSet:
 
-dll.print()
-dll.print(forward=False)
+    def __init__(self):
+        self.cap = 101
+        self.bucket = [DoubllyLinkedList() for i in range(self.cap)]
+        
 
-dll.delete(node4)
-dll.print()
-dll.print(forward=False)
+    def getBucketId(self, num):
+        return hash(num)%self.cap
+
+    def add(self, key: int) -> None:
+        if(self.contains(key)): return
+        id = self.getBucketId(key)
+        print(id, key)
+        self.bucket[id].addNodeToTail(DoubllyLinkedListNode(key))
+        
+
+    def remove(self, key: int) -> None:
+        id = self.getBucketId(key)
+        node = self.bucket[id].getNode(key)
+        if(not node): return
+        self.bucket[id].delete(node) 
+
+    def contains(self, key: int) -> bool:
+        id = self.getBucketId(key)
+        print(id, key)
+        return self.bucket[id].contains(key)  
+
+
+# Your MyHashSet object will be instantiated and called as such:
+# obj = MyHashSet()
+# obj.add(key)
+# obj.remove(key)
+# param_3 = obj.contains(key)
+s = MyHashSet()
+s.add(1)
+s.add(2)
+print(s.contains(1), s.contains(2))
+s.remove(1)
+print(s.contains(1), s.contains(2))
+
+
+
