@@ -18,6 +18,8 @@ class Solution:
         graph = {}
         for index in range(N): graph[index] = set()
         
+
+        # O(N * L * 26) ~ O(N * 260) ~ O((1.3)*10**6)
         for wordIndex in range(N):
             word = wordList[wordIndex]
             for index in range(len(word)):
@@ -28,6 +30,7 @@ class Solution:
                     graph[wordIndex].add(node)
                     graph[node].add(wordIndex)
 
+        # Make it bidirectional bfs
         def bfs(root, dest):
             queue = [root]
             visited = set()
