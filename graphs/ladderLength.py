@@ -51,6 +51,32 @@ class Solution:
                     depth += 1
             
             return -1
+        
+        def biDirectionalBfs(root, dest):
+            queue = [(root, 0), (dest, 1)]
+            visited = [{}, {}]
+            l = 2
+            depth = 1
+
+            while(queue):
+                cur, parent = queue.pop(0)
+                l -= 1
+                if(cur in visited[1^parent]): return depth + visited[1^parent][cur] 
+
+                for neigh in graph[cur]:
+                    if(neigh in visited[parent]): continue
+                    visited[parent][neigh] = depth
+                    queue.append((neigh, parent))
+                
+                if(l == 0):
+                    l = len(queue)
+                    depth += 1
+            
+            return -1
+
+        depth = bfs(src, dest)
+        if(depth == -1): return 0
+        return depth
 
         depth = bfs(src, dest)
         if(depth == -1): return 0
