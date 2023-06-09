@@ -80,7 +80,3 @@ class Solution:
         depth = bfs(src, dest)
         if(depth == -1): return 0
         return depth
-
-        depth = bfs(src, dest)
-        if(depth == -1): return 0
-        return depth
