@@ -26,11 +26,12 @@ class BTreeNode:
             ):
                 index += 1
             self.childNodes = [*self.childNodes[:index], page, *self.childNodes[index:]]
-            return self.balanceUp()
+            self.balanceUp()
+            return
 
         index = 1
         while index < len(self.childNodes) and self.childNodes[index].key < page.key: index += 2
-        return self.childNodes[index - 1].add(page)
+        self.childNodes[index - 1].add(page)
 
     def balanceUp(self):
         '''
@@ -42,8 +43,8 @@ class BTreeNode:
                 degree pointers to child nodes
                 degree-1 elements
         '''
-        if self.isLeaf and len(self.childNodes) <= self.degree + 1: return None
-        if(not self.isLeaf and len(self.childNodes) <= (2*self.degree - 1)): return None    
+        if self.isLeaf and len(self.childNodes) <= self.degree + 1: return
+        if(not self.isLeaf and len(self.childNodes) <= (2*self.degree - 1)): return
             
         new_node1, new_node2 = self.split()
         assert new_node1.parent == new_node2.parent
@@ -53,14 +54,16 @@ class BTreeNode:
             parent = BTreeNode()
             page = Page(tuple_ = None, key = new_node2.childNodes[0].key)
             parent.childNodes = [new_node1, page, new_node2]
-            return parent
+            new_node1.parent = parent
+            new_node2.parent = parent
+            return
         
         index = 0
         key = new_node2.childNodes[0].key
         while(index < len(parent.childNodes) and parent.childNodes[index] != self): index += 2
         page = Page(tuple_ = None, key = new_node2.childNodes[0].key)
         parent.childNodes = [*parent.childNodes[:index+1], page, new_node2, *parent.childNodes[index+1:]]
-        return parent.balanceUp()
+        parent.balanceUp()
 
     def split(self):
         length = len(self.childNodes)
@@ -95,8 +98,8 @@ class BTree:
         self.root.isLeaf = True
 
     def add(self, page: Page):
-        root = self.root.add(page = page)
-        if(root): self.root = root
+        self.root.add(page = page)
+        while(self.root.parent): self.root = self.root.parent
         # temp = self.root
         
         # while temp and not temp.isLeaf:
@@ -135,5 +138,5 @@ tree.add(Page(tuple_= "a", key = -10))
 tree.add(Page(tuple_= "a", key = 11))
 tree.add(Page(tuple_= "a", key = -1001))
 tree.add(Page(tuple_= "a", key = 1234555))
-# tree.add(Page(tuple_= "a", key = 69))
+tree.add(Page(tuple_= "a", key = 69))
 print(tree)
