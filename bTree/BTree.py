@@ -1,3 +1,5 @@
+from random import randint
+
 class Page:
     
     def __init__(self, tuple_=None, key=None):
@@ -46,34 +48,39 @@ class BTreeNode:
         if self.isLeaf and len(self.childNodes) <= self.degree + 1: return
         if(not self.isLeaf and len(self.childNodes) <= (2*self.degree - 1)): return
             
-        new_node1, new_node2 = self.split()
+        new_node1, new_node2, page = self.split()
         assert new_node1.parent == new_node2.parent
         parent = new_node1.parent
 
         if(not parent):
             parent = BTreeNode()
-            page = Page(tuple_ = None, key = new_node2.childNodes[0].key)
             parent.childNodes = [new_node1, page, new_node2]
             new_node1.parent = parent
             new_node2.parent = parent
             return
         
         index = 0
-        key = new_node2.childNodes[0].key
         while(index < len(parent.childNodes) and parent.childNodes[index] != self): index += 2
-        page = Page(tuple_ = None, key = new_node2.childNodes[0].key)
         parent.childNodes = [*parent.childNodes[:index+1], page, new_node2, *parent.childNodes[index+1:]]
         parent.balanceUp()
 
     def split(self):
         length = len(self.childNodes)
-        arr1, arr2 = (
-            self.childNodes[: length // 2][::],
-            self.childNodes[length // 2 :][::],
-        )
+        if(self.isLeaf):
+            arr1, arr2, page = (
+                self.childNodes[: length // 2][::],
+                self.childNodes[length // 2 :][::],
+                Page(tuple_ = None, key = self.childNodes[length // 2 :][0].key),
+            )
+        else:
+            arr1, arr2, page = (
+                self.childNodes[: length // 2][::],
+                self.childNodes[-(length // 2) :][::],
+                self.childNodes[length//2],
+            )
 
         node1, node2 = self, BTreeNode()
-        node1.isLeaf = node2.isLeaf = True
+        node2.isLeaf = node1.isLeaf
        
         node1.prevNode = self.prevNode
         node2.nextNode = self.nextNode
@@ -83,7 +90,7 @@ class BTreeNode:
 
         if node1.prevNode: node1.prevNode.nextNode = node1
         if node2.nextNode: node2.nextNode.prevNode = node2
-        return node1, node2
+        return node1, node2, page
     
     def __str__(self) -> str:
         return f"BTreeNode: {[str(child) for child in self.childNodes]}"
@@ -139,4 +146,17 @@ tree.add(Page(tuple_= "a", key = 11))
 tree.add(Page(tuple_= "a", key = -1001))
 tree.add(Page(tuple_= "a", key = 1234555))
 tree.add(Page(tuple_= "a", key = 69))
-print(tree)
+tree.add(Page(tuple_= "a", key = -169))
+tree.add(Page(tuple_= "a", key = 169))
+tree.add(Page(tuple_= "a", key = -1234555))
+# print(tree)
+
+
+# for _ in range(100):
+#     tree.add(Page(tuple_= 'abx', key=randint(-10000, 100000)))
+
+node = tree.root
+while(not node.isLeaf): node = node.childNodes[0]
+while(node):
+    for child in node.childNodes: print(child)
+    node = node.nextNode
