@@ -2,6 +2,7 @@ class Solution:
     def distributeCandies(self, n: int, limit: int) -> int:
 
         ans = 0
+        
         for x in range(0, min(limit, n) + 1):
             x_left = n - x
             if x_left <= limit:
